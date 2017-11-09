@@ -8,34 +8,34 @@ Basic fields: _srcip, dstip, srcmac, dstmac, srcport, dstport, forwarding port..
 
 ## Basic Pyretic Policies' Constrains and Updates Over _Packet_
 
-### _match(f<sub>1</sub> = v<sub>1</sub>, f<sub>2</sub> = v<sub>2</sub>, ... , f<sub>n</sub> = v<sub>n</sub>)_
+### _match(attribute<sub>1</sub> = v<sub>1</sub>, attribute<sub>2</sub> = v<sub>2</sub>, ... , attribute<sub>n</sub> = v<sub>n</sub>)_
 
-Constrain: match fields f<sub>1</sub>, f<sub>2</sub>, ..., f<sub>n</sub>.<br />
-Update: delete unmatched from _Packet_
+Constrain: (_Packet_ is empty) || (attribute<sub>1</sub> == v<sub>1</sub>, attribute<sub>2</sub> == v<sub>2</sub>, ... , attribute<sub>n</sub> == v<sub>n</sub>)<br />
+Update: delete any entry that violates constrain from _Packet_
 
 ### _drop_
 
-Constrain: none<br />
+Constrain: _Packet_ is empty<br />
 Update: truncate _Packet_
 
 ### _identity_
 
-Constrain: none<br />
+Constrain: true<br />
 Update: none
 
-### _modify(f<sub>1</sub> = v'<sub>1</sub>, f<sub>2</sub> = v'<sub>2</sub>, ... , f<sub>n</sub> = v'<sub>n</sub>)_
+### _modify(attribute<sub>1</sub> = v<sub>1</sub>, attribute<sub>2</sub> = v<sub>2</sub>, ... , attribute<sub>n</sub> = v<sub>n</sub>)_
 
-Constrain: _Packet_ is  empty<br />
-Update: set f<sub>i</sub> to v'<sub>i</sub> for all entries
+Constrain: (_Packet_ is empty) || (attribute<sub>1</sub> == v<sub>1</sub>, attribute<sub>2</sub> == v<sub>2</sub>, ... , attribute<sub>n</sub> == v<sub>n</sub>)<br />
+Update: set attribute<sub>i</sub> to v'<sub>i</sub> for any entry that violates constrain
 
 ### _forward(a)_
 
-Constrain: _Packet_ is empty<br />
-Update: set output port to a for all entries
+Constrain: (_Packet_ is empty) || (attribute<sub>1</sub> == v<sub>1</sub>, attribute<sub>2</sub> == v<sub>2</sub>, ... , attribute<sub>n</sub> == v<sub>n</sub>)<br />
+Update: set output port to a for any entry that violates constrain
 
 ### _flood()_
 
-Constrain: _Packet_ is empty<br />
+Constrain: (_Packet_ is empty) || output port == FLOOD<br />
 Update: set output port to FLOOD for all entries
 
 ## Translation Procedure
